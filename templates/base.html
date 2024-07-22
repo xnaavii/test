@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test</title>
+  </head>
+  <body>
+    <style>
+      .container {
+        display: flex;
+        align-items: center;
+        justify-items: center;
+      }
+    </style>
+    <div class="container">
+      <h2>This is working</h2>
+    </div>
+
+    {% block content %} {% endblock content %}
+    <script>
+      fetch("https://swapi.co/api/planets/1/")
+        .then((result) => result.json())
+        .then(console.log);
+    </script>
+  </body>
+</html>
