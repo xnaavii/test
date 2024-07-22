@@ -2,5 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.home, name='home')
+    path('receive-data/', views.receive_gps_data, name='receive_gps_data'),
+    path('', views.index, name='index'),
 ]

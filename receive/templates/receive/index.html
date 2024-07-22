@@ -1,2 +1,9 @@
 {% extends 'base.html' %}
-{{ context }}
+{% block content %}
+{% for data in gpsdata %}
+<div class="container"></div>
+<h2>{{data.latitude}}</h2>
+<h2>{{data.longitude}}</h2>
+<h2>{{data.timestamp}}</h2>
+{% endfor %}
+{% endblock content %}
