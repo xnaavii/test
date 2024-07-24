@@ -1,9 +1,80 @@
 {% extends 'base.html' %}
 {% block content %}
-{% for data in gpsdata %}
-<div class="container"></div>
-<h2>{{data.latitude}}</h2>
-<h2>{{data.longitude}}</h2>
-<h2>{{data.timestamp}}</h2>
-{% endfor %}
-{% endblock content %}
+<div class="container">
+    <div class="row mt-4">
+        <div class="col">
+        <form id="sendGPS" action="{% url 'receive_gps_data' %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="longitude" class="form-label">Longitude</label>
+                <input type="number" class="form-control" id="longitude" name="longitude">
+            </div>
+            <div class="mb-3">
+                <label for="latitude" class="form-label">Latitude</label>
+                <input type="number" class="form-control" id="latitude" name="latitude">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div class="row mt-2">
+        {% for x in gpsdata %}
+    <div class="col col-md-6 col-lg-4 col-xl-2 mb-2 h-100">
+        <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action api-received" aria-current="true">
+            <div class="d-flex w-100 justify-content-between">
+                <small><i class="fa-solid fa-timeline"></i> {{ x.timestamp }}</small>
+            </div>
+            <h5 class="mb-1"><i class="text-success fa-solid fa-globe fa-sm"></i> {{ x.longitude }}</h5>
+            <h5 class="mb-1"><i class="text-primary fa-solid fa-globe fa-sm"></i> {{ x.latitude }}</h5>
+        </a>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+</div>
+<script>
+    // Get all elements with the class 'api-received'
+    let receiveList = document.getElementsByClassName('api-received');
+    
+    // Loop through the HTMLCollection
+    Array.from(receiveList).forEach(element => {
+        // Add event listener for 'mousedown' (or 'mouseover' if preferred)
+        element.addEventListener('mousedown', (e) => {
+            // Toggle the 'active' class on the current element
+            element.classList.toggle("active");
+        });
+    });
+
+    const csrftoken = '{{ csrf_token }}';
+
+    document.getElementById('sendGPS').addEventListener('submit', function(event) {
+        event.preventDefault();  // Prevent the default form submission
+
+        // Create a FormData object from the form
+        const formData = new FormData(this);
+
+        // Convert FormData to a plain object and then to JSON
+        const data = Object.fromEntries(formData.entries());
+
+        fetch('http://127.0.0.1:8000/receive-data/', {  // Ensure this URL is correct
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken  // Include CSRF token in headers
+            },
+            body: JSON.stringify(data)  // Convert the object to a JSON string
+        })
+        .then(response => response.json())
+        .then(data => {
+            
+            console.log('Success:', data);
+            window.location.reload();
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+{% endblock %}

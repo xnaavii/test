@@ -6,7 +6,7 @@ from .serializers import GPSDataSerializer
 from django.shortcuts import render
 
 def index(request):
-    gpsdata = GPSTracker.objects.all()
+    gpsdata = GPSTracker.objects.all().order_by('-timestamp')
 
     context = {"gpsdata": gpsdata}
 
