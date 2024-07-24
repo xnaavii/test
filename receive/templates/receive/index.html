@@ -57,7 +57,7 @@
         // Convert FormData to a plain object and then to JSON
         const data = Object.fromEntries(formData.entries());
 
-        fetch('http://127.0.0.1:8000/receive-data/', {  // Ensure this URL is correct
+        fetch('https://test-httpsx-daf77f0d3325.herokuapp.com/receive-data/', {  // Ensure this URL is correct
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
